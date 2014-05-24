@@ -61,11 +61,19 @@ if [[ -d .git ]]; then
   fi
 
   if [[ $emoji == 1 ]]; then
+    # add random emoji icon from .emo file
     commitmsg=$(echo $commitmsg $(head -$((${RANDOM} % `wc -l < .emo` + 1)) .emo | tail -1));
   fi
 
-  echo $commitmsg
-      tempBranch=$(echo $mainbranch-$devsuffix);
+  if [[ $1 ]]; then
+    # we have commit message!
+    commitmsg=$(echo $commitmsg $1);
+    echo $commitmsg;
+    tempBranch=$(echo $mainbranch-$devsuffix);
+  else
+    echo "No commit message!"
+  fi
+
 else
   echo "ERROR: Not in git repository (.git not found!)";
 fi
