@@ -10,6 +10,6 @@ emoji        #use emoji icons in commit messages
 addall       #add all the files?
 alwaysforce  #always force commits & pushes
 prefix       #prefix of the commit msg
-pushto       #repo name
+pushto       #repo name if different than current directory
 author
 ```
