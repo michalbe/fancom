@@ -6,7 +6,6 @@ if [[ -d .git ]]; then
   # then override those values if in config file
   mainbranch=$(git rev-parse --abbrev-ref HEAD);
   reponame=$(basename $(git rev-parse --show-toplevel));
-  upstream="upstream"
   devsuffix="temp"
   emoji=1
   addall=0
@@ -16,7 +15,7 @@ if [[ -d .git ]]; then
   prefix=""
   uppercaseprefix=1
   noprefix=0
-  opencompare=1
+  opencompare=0
 
   # not actually an author, more like a github username
   author=$(git config --get remote.origin.url)
@@ -82,13 +81,17 @@ if [[ -d .git ]]; then
     # if we don't have any errors on commiting (like github hooks that fails, etc)
     # we can push
     if [[ $? == 0 ]]; then
+
       if [[ $2 ]]; then
         GIT_COMMITTER_DATE="Mon $2 22:11 2014 +0100" git commit --amend --date "Mon $2 22:11 2014 +0100";
       fi
       git push origin $mainbranch:$tempbranch -f
 
-      # and then open the browser so we can send a pull request
-      open https://github.com/$author/$reponame/compare/$mainbranch...$tempbranch\?expand\=1
+      if [[ $opencompare == 1 ]]; then
+        # and then open the browser so we can send a pull request
+        open https://github.com/$author/$reponame/compare/$mainbranch...$tempbranch\?expand\=1
+      fi
+
     else
       echo "Commit error";
     fi
