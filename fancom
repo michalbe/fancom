@@ -29,9 +29,9 @@ if [[ -d .git ]]; then
     source .fancom
   fi
 
+  # If the flag is set to `1`, add all the changes in the repo
   if [[ $addall == 1 ]]; then
-    echo 'adding all...';
-    #git add --all;
+    git add --all;
   fi
 
   if [[ $noprefix == 1 ]]; then
@@ -56,6 +56,7 @@ if [[ -d .git ]]; then
     fi
   fi
 
+  # should prefix use UPPERCASE CAHARCTERS?
   if [[ $uppercaseprefix == 1 ]]; then
     commitmsg=$(echo $commitmsg | tr '[:lower:]' '[:upper:]');
   fi
@@ -75,15 +76,18 @@ if [[ -d .git ]]; then
     commitmsg=$(echo $commitmsg $msg);
     tempbranch=$(echo $mainbranch-$devsuffix);
 
+    # commit
     git commit -m "$commitmsg";
 
-    if [[ $2 ]]; then
-      GIT_COMMITTER_DATE="Mon $2 22:11 2014 +0100" git commit --amend --date "Mon $2 22:11 2014 +0100";
-    fi
-
+    # if we don't have any errors on commiting (like github hooks that fails, etc)
+    # we can push
     if [[ $? == 0 ]]; then
-      echo 'ee'
+      if [[ $2 ]]; then
+        GIT_COMMITTER_DATE="Mon $2 22:11 2014 +0100" git commit --amend --date "Mon $2 22:11 2014 +0100";
+      fi
       git push origin $mainbranch:$tempbranch -f
+
+      # and then open the browser so we can send a pull request
       open https://github.com/$author/$reponame/compare/$mainbranch...$tempbranch\?expand\=1
     else
       echo "Commit error";
