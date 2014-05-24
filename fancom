@@ -60,10 +60,12 @@ if [[ -d .git ]]; then
     commitmsg=$(echo $commitmsg | tr '[:lower:]' '[:upper:]');
   fi
 
+  if [[ $emoji == 1 ]]; then
+    commitmsg=$(echo $commitmsg $(head -$((${RANDOM} % `wc -l < .emo` + 1)) .emo | tail -1));
+  fi
+
   echo $commitmsg
       tempBranch=$(echo $mainbranch-$devsuffix);
-
-echo $tempBranch;
 else
   echo "ERROR: Not in git repository (.git not found!)";
 fi
