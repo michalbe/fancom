@@ -1,0 +1,8 @@
+upstream="upstream"
+devsuffix="temp"
+emoji=1
+addall=1
+alwaysforce=1
+prefix="ELO"
+pushto="reponame"
+author="ghuser"
