@@ -12,6 +12,7 @@ if [[ -d .git ]]; then
   addall=0
   commitforce=0
   pushforce=0
+  branchincommit=0
   #prefix=""
   opencompare=1
 
@@ -31,6 +32,16 @@ if [[ -d .git ]]; then
     #git add --all;
   fi
 
+  if [[ $branchincommit == 0 ]]; then
+    commitmsg=$(echo '['$(echo $reponame)']');
+  else
+    commitmsg=$(echo '['$(echo $reponame $mainbranch)']');
+  fi
+
+  echo $commitmsg;
+  tempBranch=$(echo $mainbranch-$devsuffix);
+
+echo $tempBranch;
 else
   echo "ERROR: Not in git repository (.git not found!)";
 fi
