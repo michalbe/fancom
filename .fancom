@@ -8,4 +8,5 @@
 #prefix="ELO"
 #opencompare=1
 #author="authorname"
-branchincommit=0
+#branchincommit=1
+#noprefix=1
