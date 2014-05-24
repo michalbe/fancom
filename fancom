@@ -12,7 +12,7 @@ if [[ -d .git ]]; then
   addall=0
   commitforce=0
   pushforce=0
-  prefix="ELO"
+  #prefix=""
   opencompare=1
 
   # not actually an author, more like a github username
@@ -26,7 +26,11 @@ if [[ -d .git ]]; then
     source .fancom
   fi
 
-  echo "$author"
+  if [[ $addall == 1 ]]; then
+    echo 'adding all...';
+    #git add --all;
+  fi
+
 else
   echo "ERROR: Not in git repository (.git not found!)";
 fi

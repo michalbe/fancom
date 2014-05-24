@@ -2,7 +2,7 @@
 #upstream="upstream"
 #devsuffix="temp"
 #emoji=1
-#addall=0
+addall=1
 #commitforce=0
 #pushforce=0
 #prefix="ELO"
