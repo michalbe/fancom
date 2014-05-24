@@ -66,8 +66,14 @@ if [[ -d .git ]]; then
   fi
 
   if [[ $1 ]]; then
+    msg=$1;
     # we have commit message!
-    commitmsg=$(echo $commitmsg $1);
+    if [[ $1 == "-d" ]]; then
+      msg=$3;
+      data=$2;
+    fi
+    commitmsg=$(echo $commitmsg $msg);
+
     echo $commitmsg;
     tempBranch=$(echo $mainbranch-$devsuffix);
   else
