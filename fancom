@@ -1,10 +1,32 @@
 #!/bin/bash
 
+# Are we in Git repository?
 if [[ -d .git ]]; then
-  mainBranch=$(git rev-parse --abbrev-ref HEAD);
-  repoName=$(basename $(git rev-parse --show-toplevel));
-  commitPrefix=$(echo '['$(echo $repoName | tr '[:lower:]' '[:upper:]')']');
-  echo $mainBranch
+  # configure variables with default values,
+  # then override those values if in config file
+  mainbranch=$(git rev-parse --abbrev-ref HEAD);
+  reponame=$(basename $(git rev-parse --show-toplevel));
+  upstream="upstream"
+  devsuffix="temp"
+  emoji=1
+  addall=0
+  commitforce=0
+  pushforce=0
+  prefix="ELO"
+  opencompare=1
+
+  # not actually an author, more like a github username
+  author=$(git config --get remote.origin.url)
+  author=${author#*:}
+  author=${author%%/*}
+
+  # Check if there is fancom config file:
+  if [[ -f .fancom ]]; then
+    # execute config file
+    source .fancom
+  fi
+
+  echo "$author"
 else
   echo "ERROR: Not in git repository (.git not found!)";
 fi

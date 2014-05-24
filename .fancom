@@ -1,8 +1,10 @@
+reponame="reponame"
 upstream="upstream"
 devsuffix="temp"
 emoji=1
-addall=1
-alwaysforce=1
+addall=0
+commitforce=0
+pushforce=0
 prefix="ELO"
-pushto="reponame"
-author="ghuser"
+opencompare=1
+author="authorname"
