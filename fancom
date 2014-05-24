@@ -60,6 +60,9 @@ if [[ -d .git ]]; then
     commitmsg=$(echo $commitmsg | tr '[:lower:]' '[:upper:]')
   fi
 
+  # add dash after prefix
+  commitmsg=$(echo $commitmsg -);
+
   if [[ $emoji == 1 ]]; then
     # add random emoji icon from .emo file
     commitmsg=$(echo $commitmsg $(head -$((${RANDOM} % `wc -l < .emo` + 1)) .emo | tail -1))
