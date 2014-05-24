@@ -12,7 +12,7 @@ if [[ -d .git ]]; then
   addall=0
   commitforce=0
   pushforce=0
-  branchinprefix=1
+  branchinprefix=0
   prefix=""
   uppercaseprefix=1
   noprefix=0
@@ -70,7 +70,6 @@ if [[ -d .git ]]; then
     # we have commit message!
     if [[ $1 == "-d" ]]; then
       msg=$3;
-      data=$2;
     fi
 
     commitmsg=$(echo $commitmsg $msg);
@@ -78,8 +77,13 @@ if [[ -d .git ]]; then
 
     git commit -m "$commitmsg";
 
+    if [[ $2 ]]; then
+      GIT_COMMITTER_DATE="Mon $2 22:11 2014 +0100" git commit --amend --date "Mon $2 22:11 2014 +0100";
+    fi
+
     if [[ $? == 0 ]]; then
-      git push origin $mainbranch:$tempbranch
+      echo 'ee'
+      git push origin $mainbranch:$tempbranch -f
       open https://github.com/$author/$reponame/compare/$mainbranch...$tempbranch\?expand\=1
     else
       echo "Commit error";
