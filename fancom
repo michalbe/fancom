@@ -4,8 +4,8 @@
 if [[ -d .git ]]; then
   # configure variables with default values,
   # then override those values if in config file
-  mainbranch=$(git rev-parse --abbrev-ref HEAD);
-  reponame=$(basename $(git rev-parse --show-toplevel));
+  mainbranch=$(git rev-parse --abbrev-ref HEAD)
+  reponame=$(basename $(git rev-parse --show-toplevel))
   devsuffix="temp"
   emoji=1
   addall=0
@@ -15,7 +15,7 @@ if [[ -d .git ]]; then
   prefix=""
   uppercaseprefix=1
   noprefix=0
-  opencompare=0
+  opencompare=1
 
   # not actually an author, more like a github username
   author=$(git config --get remote.origin.url)
@@ -30,60 +30,60 @@ if [[ -d .git ]]; then
 
   # If the flag is set to `1`, add all the changes in the repo
   if [[ $addall == 1 ]]; then
-    git add --all;
+    git add --all
   fi
 
   if [[ $noprefix == 1 ]]; then
     # we don't need any prefix.
     # even if `prefix` var has any value `noprefix`
     # option has higher priority
-    commitmsg="";
+    commitmsg=""
 
   elif [[ $prefix && $noprefix == 0 ]]; then
     # prefix variable is set, and noprefix is disabled,
     # we set custom prefix
     if [[ $branchinprefix == 0 ]]; then
-      commitmsg=$(echo '['$(echo $prefix)']');
+      commitmsg=$(echo '['$(echo $prefix)']')
     else
-      commitmsg=$(echo '['$(echo $prefix $mainbranch)']');
+      commitmsg=$(echo '['$(echo $prefix $mainbranch)']')
     fi
   else
     if [[ $branchinprefix == 0 ]]; then
-      commitmsg=$(echo '['$(echo $reponame)']');
+      commitmsg=$(echo '['$(echo $reponame)']')
     else
-      commitmsg=$(echo '['$(echo $reponame $mainbranch)']');
+      commitmsg=$(echo '['$(echo $reponame $mainbranch)']')
     fi
   fi
 
   # should prefix use UPPERCASE CAHARCTERS?
   if [[ $uppercaseprefix == 1 ]]; then
-    commitmsg=$(echo $commitmsg | tr '[:lower:]' '[:upper:]');
+    commitmsg=$(echo $commitmsg | tr '[:lower:]' '[:upper:]')
   fi
 
   if [[ $emoji == 1 ]]; then
     # add random emoji icon from .emo file
-    commitmsg=$(echo $commitmsg $(head -$((${RANDOM} % `wc -l < .emo` + 1)) .emo | tail -1));
+    commitmsg=$(echo $commitmsg $(head -$((${RANDOM} % `wc -l < .emo` + 1)) .emo | tail -1))
   fi
 
   if [[ $1 ]]; then
-    msg=$1;
+    msg=$1
     # we have commit message!
     if [[ $1 == "-d" ]]; then
-      msg=$3;
+      msg=$3
     fi
 
-    commitmsg=$(echo $commitmsg $msg);
-    tempbranch=$(echo $mainbranch-$devsuffix);
+    commitmsg=$(echo $commitmsg $msg)
+    tempbranch=$(echo $mainbranch-$devsuffix)
 
     # commit
-    git commit -m "$commitmsg";
+    git commit -m "$commitmsg"
 
     # if we don't have any errors on commiting (like github hooks that fails, etc)
     # we can push
     if [[ $? == 0 ]]; then
 
       if [[ $2 ]]; then
-        GIT_COMMITTER_DATE="Mon $2 22:11 2014 +0100" git commit --amend --date "Mon $2 22:11 2014 +0100";
+        GIT_COMMITTER_DATE="Mon $2 22:11 2014 +0100" git commit --amend --date "Mon $2 22:11 2014 +0100"
       fi
       git push origin $mainbranch:$tempbranch -f
 
@@ -93,12 +93,12 @@ if [[ -d .git ]]; then
       fi
 
     else
-      echo "Commit error";
+      echo "Commit error"
     fi
   else
     echo "No commit message!"
   fi
 
 else
-  echo "ERROR: Not in git repository (.git not found!)";
+  echo "ERROR: Not in git repository (.git not found!)"
 fi
