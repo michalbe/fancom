@@ -1,7 +1,10 @@
 #!/bin/bash
 
-mainBranch=$(git rev-parse --abbrev-ref HEAD);
-repoName=$(basename $(git rev-parse --show-toplevel));
-commitPrefix=$(echo '['$(echo $repoName | tr '[:lower:]' '[:upper:]')']');
-
-echo $mainBranch
+if [[ -d .git ]]; then
+  mainBranch=$(git rev-parse --abbrev-ref HEAD);
+  repoName=$(basename $(git rev-parse --show-toplevel));
+  commitPrefix=$(echo '['$(echo $repoName | tr '[:lower:]' '[:upper:]')']');
+  echo $mainBranch
+else
+  echo "ERROR: Not in git repository (.git not found!)";
+fi
