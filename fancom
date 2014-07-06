@@ -1,0 +1,7 @@
+#!/bin/bash
+
+mainBranch=$(git rev-parse --abbrev-ref HEAD);
+repoName=$(basename $(git rev-parse --show-toplevel));
+commitPrefix=$(echo '['$(echo $repoName | tr '[:lower:]' '[:upper:]')']');
+
+echo $mainBranch
