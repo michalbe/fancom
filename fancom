@@ -1,10 +1,107 @@
 #!/bin/bash
 
+# Are we in Git repository?
 if [[ -d .git ]]; then
-  mainBranch=$(git rev-parse --abbrev-ref HEAD);
-  repoName=$(basename $(git rev-parse --show-toplevel));
-  commitPrefix=$(echo '['$(echo $repoName | tr '[:lower:]' '[:upper:]')']');
-  echo $mainBranch
+  # configure variables with default values,
+  # then override those values if in config file
+  mainbranch=$(git rev-parse --abbrev-ref HEAD)
+  reponame=$(basename $(git rev-parse --show-toplevel))
+  devsuffix="temp"
+  emoji=1
+  addall=0
+  commitforce=0
+  pushforce=0
+  branchinprefix=0
+  prefix=""
+  uppercaseprefix=1
+  noprefix=0
+  opencompare=1
+
+  # not actually an author, more like a github username
+  author=$(git config --get remote.origin.url)
+  author=${author#*:}
+  author=${author%%/*}
+
+  # Check if there is fancom config file:
+  if [[ -f .fancom ]]; then
+    # execute config file
+    source .fancom
+  fi
+
+  # If the flag is set to `1`, add all the changes in the repo
+  if [[ $addall == 1 ]]; then
+    git add --all
+  fi
+
+  if [[ $noprefix == 1 ]]; then
+    # we don't need any prefix.
+    # even if `prefix` var has any value `noprefix`
+    # option has higher priority
+    commitmsg=""
+
+  elif [[ $prefix && $noprefix == 0 ]]; then
+    # prefix variable is set, and noprefix is disabled,
+    # we set custom prefix
+    if [[ $branchinprefix == 0 ]]; then
+      commitmsg=$(echo '['$(echo $prefix)']')
+    else
+      commitmsg=$(echo '['$(echo $prefix $mainbranch)']')
+    fi
+  else
+    if [[ $branchinprefix == 0 ]]; then
+      commitmsg=$(echo '['$(echo $reponame)']')
+    else
+      commitmsg=$(echo '['$(echo $reponame $mainbranch)']')
+    fi
+  fi
+
+  # should prefix use UPPERCASE CAHARCTERS?
+  if [[ $uppercaseprefix == 1 ]]; then
+    commitmsg=$(echo $commitmsg | tr '[:lower:]' '[:upper:]')
+  fi
+
+  # add dash after prefix
+  commitmsg=$(echo $commitmsg -);
+
+  if [[ $emoji == 1 ]]; then
+    # add random emoji icon from .emo file
+    commitmsg=$(echo $commitmsg $(head -$((${RANDOM} % `wc -l < .emo` + 1)) .emo | tail -1))
+  fi
+
+  if [[ $1 ]]; then
+    msg=$1
+    # we have commit message!
+    if [[ $1 == "-d" ]]; then
+      msg=$3
+    fi
+
+    commitmsg=$(echo $commitmsg $msg)
+    tempbranch=$(echo $mainbranch-$devsuffix)
+
+    # commit
+    git commit -m "$commitmsg"
+
+    # if we don't have any errors on commiting (like github hooks that fails, etc)
+    # we can push
+    if [[ $? == 0 ]]; then
+
+      if [[ $2 ]]; then
+        GIT_COMMITTER_DATE="Mon $2 22:11 2014 +0100" git commit --amend --date "Mon $2 22:11 2014 +0100"
+      fi
+      git push origin $mainbranch:$tempbranch -f
+
+      if [[ $opencompare == 1 ]]; then
+        # and then open the browser so we can send a pull request
+        open https://github.com/$author/$reponame/compare/$mainbranch...$tempbranch\?expand\=1
+      fi
+
+    else
+      echo "Commit error"
+    fi
+  else
+    echo "No commit message!"
+  fi
+
 else
-  echo "ERROR: Not in git repository (.git not found!)";
+  echo "ERROR: Not in git repository (.git not found!)"
 fi
