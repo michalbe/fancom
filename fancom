@@ -76,11 +76,11 @@ if [[ -d .git ]]; then
     commitmsg=$(echo $commitmsg $msg);
     tempBranch=$(echo $mainbranch-$devsuffix);
 
-    git commit -m $commitmsg;
+    git commit -m "$commitmsg";
 
     if [[ $? == 0 ]]; then
       git push origin $mainbranch:$tempbranch
-      open https://github.com/$author/$repoName/compare/$mainbranch...$tempbranch\?expand\=1
+      open https://github.com/$author/$reponame/compare/$mainbranch...$tempbranch\?expand\=1
     else
       echo "Commit error";
     fi
