@@ -74,7 +74,7 @@ if [[ -d .git ]]; then
     fi
 
     commitmsg=$(echo $commitmsg $msg);
-    tempBranch=$(echo $mainbranch-$devsuffix);
+    tempbranch=$(echo $mainbranch-$devsuffix);
 
     git commit -m "$commitmsg";
 
