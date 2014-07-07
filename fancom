@@ -16,18 +16,22 @@ if [[ -d .git ]]; then
   uppercaseprefix=1
   noprefix=0
   opencompare=1
+  pushtotemp=1
+  comparewith=""
 
   # not actually an author, more like a github username
   author=$(git config --get remote.origin.url)
   author=${author#*:}
   author=${author%%/*}
 
+  echo $reponame;
   # Check if there is fancom config file:
   if [[ -f .fancom ]]; then
     # execute config file
-    source .fancom
+    source $PWD/.fancom
   fi
 
+echo $reponame;
   # If the flag is set to `1`, add all the changes in the repo
   if [[ $addall == 1 ]]; then
     git add --all
@@ -65,7 +69,10 @@ if [[ -d .git ]]; then
 
   if [[ $emoji == 1 ]]; then
     # add random emoji icon from .emo file
-    commitmsg=$(echo $commitmsg $(head -$((${RANDOM} % `wc -l < .emo` + 1)) .emo | tail -1))
+    file=$0
+    file=${file%/*}
+    file=$(echo $file/.emo)
+    commitmsg=$(echo $commitmsg $(head -$((${RANDOM} % `wc -l < $file` + 1)) $file | tail -1))
   fi
 
   if [[ $1 ]]; then
@@ -88,9 +95,18 @@ if [[ -d .git ]]; then
       if [[ $2 ]]; then
         GIT_COMMITTER_DATE="Mon $2 22:11 2014 +0100" git commit --amend --date "Mon $2 22:11 2014 +0100"
       fi
-      git push origin $mainbranch:$tempbranch -f
+
+      if [[ $pushtotemp == 1 ]]; then
+        git push origin $mainbranch:$tempbranch -f
+      else
+        git push origin $mainbranch -f
+      fi
 
       if [[ $opencompare == 1 ]]; then
+        if [[ $comparewith ]]; then
+          tempbranch=$mainbranch
+          mainbranch=$comparewith
+        fi
         # and then open the browser so we can send a pull request
         open https://github.com/$author/$reponame/compare/$mainbranch...$tempbranch\?expand\=1
       fi

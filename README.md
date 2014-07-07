@@ -18,6 +18,13 @@ Options available in `.fancom` config file:
 # Name of the repository, default: name of the current repo
 #reponame="reponame"
 
+# Do we want to push to the temporary branch? Default: yes
+#pushtotemp=1
+
+# After pushing to the repo, what branch needs to be compared?
+# Default: 'branch-temp'
+#comparewith="branch to compare"
+
 # Suffix added to the temporary created, developer's branch, default: 'temp'
 #devsuffix="temp"
 
