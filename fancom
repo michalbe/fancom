@@ -72,10 +72,18 @@ if [[ -d .git ]]; then
       msg=$3;
       data=$2;
     fi
-    commitmsg=$(echo $commitmsg $msg);
 
-    echo $commitmsg;
+    commitmsg=$(echo $commitmsg $msg);
     tempBranch=$(echo $mainbranch-$devsuffix);
+
+    git commit -m $commitmsg;
+
+    if [[ $? == 0 ]]; then
+      git push origin $mainbranch:$tempbranch
+      open https://github.com/$author/$repoName/compare/$mainbranch...$tempbranch\?expand\=1
+    else
+      echo "Commit error";
+    fi
   else
     echo "No commit message!"
   fi
