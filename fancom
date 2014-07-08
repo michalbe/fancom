@@ -24,14 +24,12 @@ if [[ -d .git ]]; then
   author=${author#*:}
   author=${author%%/*}
 
-  echo $reponame;
   # Check if there is fancom config file:
   if [[ -f .fancom ]]; then
     # execute config file
     source $PWD/.fancom
   fi
 
-echo $reponame;
   # If the flag is set to `1`, add all the changes in the repo
   if [[ $addall == 1 ]]; then
     git add --all
