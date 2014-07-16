@@ -7,7 +7,7 @@ if [[ -d .git ]]; then
   mainbranch=$(git rev-parse --abbrev-ref HEAD)
   reponame=$(basename $(git rev-parse --show-toplevel))
   devsuffix="temp"
-  emoji=1
+  emoji=0
   addall=0
   commitforce=0
   pushforce=0
