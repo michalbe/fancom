@@ -63,7 +63,9 @@ if [[ -d .git ]]; then
   fi
 
   # add dash after prefix
-  commitmsg=$(echo $commitmsg -);
+  if [[ $prefix && $noprefix == 0 ]]; then
+    commitmsg=$(echo $commitmsg -);
+  fi
 
   if [[ $emoji == 1 ]]; then
     # add random emoji icon from .emo file
