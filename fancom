@@ -45,15 +45,15 @@ if [[ -d .git ]]; then
     # prefix variable is set, and noprefix is disabled,
     # we set custom prefix
     if [[ $branchinprefix == 0 ]]; then
-      commitmsg=$(echo '['$(echo $prefix)']')
+      commitmsg=$(echo '['$(echo $prefix)']' -)
     else
-      commitmsg=$(echo '['$(echo $prefix $mainbranch)']')
+      commitmsg=$(echo '['$(echo $prefix $mainbranch)']' -)
     fi
   else
     if [[ $branchinprefix == 0 ]]; then
-      commitmsg=$(echo '['$(echo $reponame)']')
+      commitmsg=$(echo '['$(echo $reponame)']' -)
     else
-      commitmsg=$(echo '['$(echo $reponame $mainbranch)']')
+      commitmsg=$(echo '['$(echo $reponame $mainbranch)']' -)
     fi
   fi
 
@@ -61,9 +61,6 @@ if [[ -d .git ]]; then
   if [[ $uppercaseprefix == 1 ]]; then
     commitmsg=$(echo $commitmsg | tr '[:lower:]' '[:upper:]')
   fi
-
-  # add dash after prefix
-  commitmsg=$(echo $commitmsg -);
 
   if [[ $emoji == 1 ]]; then
     # add random emoji icon from .emo file
