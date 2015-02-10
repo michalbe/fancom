@@ -26,7 +26,11 @@ if [[ -d .git ]]; then
   author=${author%%/*}
 
   # and if it's not there, try regular URL
-  # (like https://github.com/michalbe/PHOQSE.git)
+  # (like https://github.com/michalbe/fancom.git)
+  if [[ $author == "" ]]; then
+    author=${author#*.com/}
+    author=${author%%/*}
+  fi
 
   # Check if there is fancom config file:
   if [[ -f .fancom ]]; then
