@@ -20,9 +20,13 @@ if [[ -d .git ]]; then
   comparewith=""
 
   # not actually an author, more like a github username
+  # get it from ssh address (like git@github.com:michalbe/fancom.git)
   author=$(git config --get remote.origin.url)
   author=${author#*:}
   author=${author%%/*}
+
+  # and if it's not there, try regular URL
+  # (like https://github.com/michalbe/PHOQSE.git)
 
   # Check if there is fancom config file:
   if [[ -f .fancom ]]; then
