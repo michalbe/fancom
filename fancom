@@ -28,6 +28,7 @@ if [[ -d .git ]]; then
   # and if it's not there, try regular URL
   # (like https://github.com/michalbe/fancom.git)
   if [[ $author == "" ]]; then
+    author=$(git config --get remote.origin.url)
     author=${author#*.com/}
     author=${author%%/*}
   fi
