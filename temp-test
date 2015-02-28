@@ -1,0 +1,10 @@
+#!/bin/bash
+
+openmetod=(open)
+which sensible-browser >/dev/null
+#sensible browser is in the system, use it
+if [[ $? == 0 ]]; then
+  openmethod=(sensible-browser)
+fi
+
+echo $openmethod
