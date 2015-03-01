@@ -111,8 +111,20 @@ if [[ -d .git ]]; then
           tempbranch=$mainbranch
           mainbranch=$comparewith
         fi
+
+        # default method of opening a browser window will be 'open' command
+        # (OSX)
+        openmetod=(open)
+
+        # but if sensible-browser is specified, use it instead
+        # (Linux)
+        which sensible-browser >/dev/null
+        if [[ $? == 0 ]]; then
+          openmethod=(sensible-browser)
+        fi
+
         # and then open the browser so we can send a pull request
-        open https://github.com/$author/$reponame/compare/$mainbranch...$tempbranch\?expand\=1
+        $openmethod https://github.com/$author/$reponame/compare/$mainbranch...$tempbranch\?expand\=1
       fi
 
     else
