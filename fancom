@@ -97,7 +97,8 @@ if [[ -d .git ]]; then
     if [[ $? == 0 ]]; then
 
       if [[ $2 ]]; then
-        GIT_COMMITTER_DATE="Mon $2 01:01 2015 +0100" git commit --amend --date "Mon $2 01:01 2015 +0100" -m "$commitmsg"
+        currentdate=$(date +"%H:%M %Y")
+        GIT_COMMITTER_DATE="Mon $2 $currentdate +0100" git commit --amend --date "Mon $2 $currentdate +0100" -m "$commitmsg"
       fi
 
       if [[ $pushtotemp == 1 ]]; then
